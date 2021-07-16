@@ -4,7 +4,7 @@ interface ICategory {
   name?: string;
   categoryName?: string;
   translation?: string;
-  _deletedAt?: number | null;
+  _deletedAt?: Date | null | number;
   sound?: string;
   img?: string;
   id?: string;

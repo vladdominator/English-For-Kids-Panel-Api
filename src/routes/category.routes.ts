@@ -2,6 +2,7 @@ import Category from '../models/Category';
 import { Router } from 'express';
 import { updateCategory } from '../updateCategory';
 import mongoose from 'mongoose';
+import Cards from '../models/Cards';
 
 const router = Router();
 export interface Category {
@@ -56,6 +57,11 @@ router.delete('/:id', async (req, res) => {
   }
   try {
     await updateCategory({ _deletedAt: Date.now(), id });
+    const category = await Category.findById(id);
+    await Cards.updateMany(
+      { categoryName: category.name },
+      { $set: { _deletedAt: Date.now() } }
+    );
     return res.sendStatus(StatusCodes.Ok);
   } catch (e) {
     return res.status(StatusCodes.BadRequest).send(e);
@@ -71,6 +77,11 @@ router.put('/:id', async (req, res) => {
     return res.status(StatusCodes.BadRequest);
   }
   try {
+    const category = await Category.findById(id);
+    await Cards.updateMany(
+      { categoryName: category.name },
+      { $set: { categoryName: name } }
+    );
     await updateCategory({ name, _deletedAt, id, words });
     return res.sendStatus(StatusCodes.Ok);
   } catch (e) {

@@ -6,5 +6,5 @@ export interface SavedCards extends Document {
   translation: string;
   sound: string;
   img: string;
-  _deletedAt: Date;
+  _deletedAt: Date | number;
 }
